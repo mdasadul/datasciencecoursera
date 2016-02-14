@@ -10,27 +10,30 @@ rankhospital<- function(state,outcome,N){
     print("invalid outcome")
 
   }
-  if(N =="best") N=1
-  else if(N=="worst")N=-1
+ 
 
-  sdata<-subset(outcome_data, State==state,select=c(Hospital.Name,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failu$
-  h_a<-subset(sdata,select = c(Hospital.Name,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack))
-  heart_attack<-h_a[order(as.numeric(h_a[,2]),h_a[,1]),][N,]
-  h_f<-subset(sdata,select = c(Hospital.Name,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure))
-  heart_failure<-h_f[order(as.numeric(h_f[,2]),h_f[,1]),][N,]
-  temp_pnu<-subset(sdata,select = c(Hospital.Name,Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia))
-  pneumonia<-temp_pnu[order(as.numeric(temp_pnu[,2]),temp_pnu[,1]),][N,]
-  return_state=''
-
-  if(outcome == possible_outcome[1]){
-
-    return_state =heart_attack
-    #print(heart_attack)
-  } else if(outcome ==possible_outcome[2]){
-    return_state = heart_failure
-  }else if(outcome ==possible_outcome[3]){
-    return_state = pnumonia
+  sdata<-subset(outcome_data, State==state,select=c(Hospital.Name,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack,Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure, Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia))
+  
+  ## For each state, find the hospital of the given rank
+  if(outcome=="heart attack"){
+    data<-sdata[,c(1,2)]
+  }else if( outcome == "heart failure"){
+    data<-sdata[,c(1,3)]
+  }else{
+    data<-sdata[,c(1,4)]
   }
-  return_state
+  names(data)[2]<-"Rate"
+  data[, 2] = suppressWarnings( as.numeric(data[, 2]) )
+  
+  data = data[!is.na(data$Rate),]
+  
+  data<-data[order(data$Rate,data$Hospital.Name),]
+  if(N=="best")
+    return(data$Hospital.Name[1])
+  else if(N=="worst"){
+    return(data$Hospital.Name[nrow(data)])
+  }else{
+    return(data$Hospital.Name[N])
+  }
 }
 
