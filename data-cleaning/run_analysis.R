@@ -62,3 +62,4 @@ tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.f
 #removing unnecesary column
 tidy_data[,89]<-tidy_data[,90]<-NULL
 #str(tidy_data)
+write.table(tidy_data, file='tidy_data.txt',row.name=FALSE)
