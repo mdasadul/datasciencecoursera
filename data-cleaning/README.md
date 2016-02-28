@@ -1,8 +1,33 @@
 
+#Read the Train data, subject and train target and create a variable called x
+trainDataFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/X_train.txt'
+train_sub_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/subject_train.txt'
+train_y_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/y_train.txt'
+x <- read.table(trainDataFile, header=FALSE, sep ="")
+train_y<-read.csv(train_y_url,header = FALSE,sep = '')
+train_sub<-read.csv(train_sub_url,header = FALSE,sep = '')
+x[,562]<-train_sub
+x[,563]<-train_y
 
- Read the Train data, subject and train target and create a variable called x
- Read the Testdata, subject and test target and create a variable called testdata
- then I combined the traindata(x) with testdata
+
+ 
+ 
+#Read the Testdata, subject and test target and create a variable called testdata
+testDataFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/X_test.txt'
+test_sub_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/subject_test.txt'
+test_y_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/y_test.txt'
+
+testdata <- read.table(testDataFile, header=FALSE, sep ="")
+test_sub<-read.csv(test_sub_url,header = FALSE,sep = '')
+test_y<-read.csv(test_y_url,header = FALSE,sep = '')
+testdata[,562]<-test_sub
+testdata[,563]<-test_y
+
+
+
+#combined train and test data
+combined<-rbind(x,testdata)
+
  
 #after that I read the column names from features.txt
 colnameFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/features.txt'
