@@ -44,7 +44,7 @@ names(combined_data)<-c(colname,'Subject','Activity')
 str(combined_data)
 
 activity_label_<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/activity_labels.txt'
-activity_label <- read.table(activity_label_, header=FALSE, sep ="")
+activity_labels <- read.table(activity_label_, header=FALSE, sep ="")
 str(activity_labels)
 
 label<-1
@@ -54,4 +54,6 @@ for(activityLabel in activity_labels$V2){
 }
 tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.factor(combined_data$Subject)),mean)
 
+#removing unnecesary column
 tidy_data[,89]<-tidy_data[,90]<-NULL
+str(tidy_data)
