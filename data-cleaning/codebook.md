@@ -22,27 +22,12 @@ Read the Train data, subject and train target and create a variable called x
 
 8. After that I remove the column name does not have Std or Mean
 
-#renaming the column of combined data
-names(combined_data)<-c(colname,'Subject','Activity')
+9. After that I rename the column of combined data
 
-#str(combined_data)
+10. I replace the numeric data in activity column by alphanumeric label
 
-activity_label_<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/activity_labels.txt'
-activity_labels <- read.table(activity_label_, header=FALSE, sep ="")
 
-#replace the numeric label by alphanumeric label
-label<-1
-for(activityLabel in activity_labels$V2){
-  combined_data$Activity<-gsub(label,activityLabel,combined_data$Activity)
-  label =label+1
-}
+11. creating tidy data by grouping into activity and subject by using aggregate function
 
-#creating tidy data by grouping into activity and subject
-tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.factor(combined_data$Subject)),mean)
-
-#removing unnecesary columns
-tidy_data[,89]<-tidy_data[,90]<-NULL
-
-#str(tidy_data)
-write.table(tidy_data, file='tidy_data.txt',sep=" ",row.name=FALSE)
-
+12. I remove activity and subject column 
+13. finally I write down the data into tidy_data.txt file
