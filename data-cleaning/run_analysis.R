@@ -6,7 +6,7 @@ train_y<-read.csv(train_y_url,header = FALSE,sep = '')
 train_sub<-read.csv(train_sub_url,header = FALSE,sep = '')
 x[,562]<-train_sub
 x[,563]<-train_y
-str(x)
+#str(x)
 
 testDataFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/X_test.txt'
 test_sub_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/subject_test.txt'
@@ -18,7 +18,7 @@ test_y<-read.csv(test_y_url,header = FALSE,sep = '')
 testdata[,562]<-test_sub
 testdata[,563]<-test_y
 
-str(testdata)
+#str(testdata)
 
 #combined train and test data
 combined<-rbind(x,testdata)
@@ -37,23 +37,28 @@ name<-grep("Mean|Std",colname)
 colname<-colname[name]
 colnumber<-c(name,562,563)
 
+
 combined_data<-combined[,colnumber]
-str(combined_data)
+#str(combined_data)
 names(combined_data)<-c(colname,'Subject','Activity')
 
-str(combined_data)
+#str(combined_data)
 
 activity_label_<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/activity_labels.txt'
 activity_labels <- read.table(activity_label_, header=FALSE, sep ="")
-str(activity_labels)
+#str(activity_labels)
 
+#replace the numeric label by alphanumeric label
 label<-1
 for(activityLabel in activity_labels$V2){
+ 
   combined_data$Activity<-gsub(label,activityLabel,combined_data$Activity)
   label =label+1
 }
+
+#creating tidy data
 tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.factor(combined_data$Subject)),mean)
 
 #removing unnecesary column
 tidy_data[,89]<-tidy_data[,90]<-NULL
-str(tidy_data)
+#str(tidy_data)
