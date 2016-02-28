@@ -1,0 +1,47 @@
+
+
+ Read the Train data, subject and train target and create a variable called x
+ Read the Testdata, subject and test target and create a variable called testdata
+ then I combined the traindata(x) with testdata
+ after that I read the column
+
+#get the column names
+colnameFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/features.txt'
+colname <- read.table(colnameFile, header=FALSE, sep ="")
+str(colname)
+colname<-gsub('-mean',"Mean",colname[,2])
+colname<-gsub('-std',"Std",colname)
+colname<-gsub('[-()]',"",colname)
+#set the column names
+#names(combined)<-colname
+name<-grep("Mean|Std",colname)
+
+colname<-colname[name]
+colnumber<-c(name,562,563)
+
+
+combined_data<-combined[,colnumber]
+#str(combined_data)
+names(combined_data)<-c(colname,'Subject','Activity')
+
+#str(combined_data)
+
+activity_label_<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/activity_labels.txt'
+activity_labels <- read.table(activity_label_, header=FALSE, sep ="")
+#str(activity_labels)
+
+#replace the numeric label by alphanumeric label
+label<-1
+for(activityLabel in activity_labels$V2){
+ 
+  combined_data$Activity<-gsub(label,activityLabel,combined_data$Activity)
+  label =label+1
+}
+
+#creating tidy data
+tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.factor(combined_data$Subject)),mean)
+
+#removing unnecesary column
+tidy_data[,89]<-tidy_data[,90]<-NULL
+#str(tidy_data)
+write.table(tidy_data, file='tidy_data.txt',sep=" ",row.name=FALSE)
