@@ -55,11 +55,9 @@ for(activityLabel in activity_labels$V2){
   combined_data$Activity<-gsub(label,activityLabel,combined_data$Activity)
   label =label+1
 }
-
-#creating tidy data
-tidy_data=aggregate(combined_data,by=list(as.factor(combined_data$Activity),as.factor(combined_data$Subject)),mean)
-
+tidy = ddply(combined_data, c("Subject","Activity"), numcolwise(mean))
 #removing unnecesary column
-tidy_data[,89]<-tidy_data[,90]<-NULL
+tidy_data[,1]<-NULL
+
 #str(tidy_data)
-write.table(tidy_data, file='tidy_data.txt',row.name=FALSE)
+write.table(tidy_data[], file='tidy_data.txt',row.name=FALSE, quote = FALSE)
