@@ -1,20 +1,21 @@
-trainDataFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/X_train.txt'
-train_sub_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/subject_train.txt'
-train_y_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/train/y_train.txt'
+dir <-'/home/developer/datasciencecoursera/specdata/UCI HAR Dataset'
+trainDataFile<-paste(dir,'/train/X_train.txt',sep = "")
+train_sub_url<-paste(dir,'/train/subject_train.txt',sep="")
+train_y_url<-paste(dir,'/train/y_train.txt',sep="")
 x <- read.table(trainDataFile, header=FALSE, sep ="")
 train_y<-read.csv(train_y_url,header = FALSE,sep = '')
 train_sub<-read.csv(train_sub_url,header = FALSE,sep = '')
 x[,562]<-train_sub
 x[,563]<-train_y
-#str(x)
+str(x)
 
-testDataFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/X_test.txt'
-test_sub_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/subject_test.txt'
-test_y_url<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/test/y_test.txt'
+testDataFile<-paste(dir,'/test/X_test.txt',sep = "")
+test_sub_url<-paste(dir,'/test/subject_test.txt',sep="")
+test_y_url<-paste(dir,'/test/y_test.txt',sep="")
 
 testdata <- read.table(testDataFile, header=FALSE, sep ="")
-test_sub<-read.csv(test_sub_url,header = FALSE,sep = '')
-test_y<-read.csv(test_y_url,header = FALSE,sep = '')
+test_sub<-read.csv(test_sub_url,header = FALSE,sep = "")
+test_y<-read.csv(test_y_url,header = FALSE,sep = "")
 testdata[,562]<-test_sub
 testdata[,563]<-test_y
 
@@ -24,7 +25,7 @@ testdata[,563]<-test_y
 combined<-rbind(x,testdata)
 
 #get the column names
-colnameFile<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/features.txt'
+colnameFile<-paste(dir,'/features.txt',sep="")
 colname <- read.table(colnameFile, header=FALSE, sep ="")
 str(colname)
 colname<-gsub('-mean',"Mean",colname[,2])
@@ -44,7 +45,7 @@ names(combined_data)<-c(colname,'Subject','Activity')
 
 #str(combined_data)
 
-activity_label_<-'/Users/asad/datasciencecoursera/data/UCI HAR Dataset/activity_labels.txt'
+activity_label_<-paste(dir,'/activity_labels.txt',sep="")
 activity_labels <- read.table(activity_label_, header=FALSE, sep ="")
 #str(activity_labels)
 
@@ -55,9 +56,10 @@ for(activityLabel in activity_labels$V2){
   combined_data$Activity<-gsub(label,activityLabel,combined_data$Activity)
   label =label+1
 }
-tidy = ddply(combined_data, c("Subject","Activity"), numcolwise(mean))
-#removing unnecesary column
-tidy_data[,1]<-NULL
+combined_data$Activity <- as.factor(combined_data$Activity)
+combined_data$Subject <- as.factor(combined_data$Subject)
+
+tidy_data = ddply(combined_data, c("Subject","Activity"), numcolwise(mean))
 
 #str(tidy_data)
-write.table(tidy_data[], file='tidy_data.txt',row.name=FALSE, quote = FALSE)
+write.table(tidy_data, file=paste('/home/developer/datasciencecoursera/tidy_data.txt',sep=""),row.name=FALSE, quote = FALSE)
