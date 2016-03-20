@@ -38,7 +38,7 @@ library(Hmisc)
 ## Loading and preprocessing the data
 
 ```r
-dataDir='/Users/asad/R/datasciencecoursera/RepResearch/RepData_PeerAssessment1/data/activity.csv'
+dataDir='/Users/asad/R/datasciencecoursera/RepResearch/data/activity.csv'
 data=read.csv(dataDir)
 ```
 
