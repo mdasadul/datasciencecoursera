@@ -1,0 +1,84 @@
+---
+title: "Statistical Inference Course project I"
+author: "Md Asadul Islam"
+date: '2016-05-08'
+output: html_document
+---
+## Overview
+In this project I will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. I am setting lambda = 0.2 for all of the simulations. I will investigate the distribution of averages of 40 exponentials. Note that I will do a thousand simulations.
+## Simulation
+```{r}
+# seeting lambda =0.2 for all simulation
+lambda <- 0.2
+
+# will investigate averages of 40 exponentials
+n <-40
+
+# I am running the simulation 1000 times
+numberofSimulation <-1000
+
+exponentialData <- matrix(rexp(n*numberofSimulation , lambda) , nrow = numberofSimulation)
+meanOfExponentialData <- apply(exponentialData,1, mean)
+
+```
+## Theoritical mean Vs Sample mean
+```{r}
+library(ggplot2)
+# Theoritical mean
+theoriticalMean <-1/lambda
+theoriticalMean
+
+sampleMean <- mean(meanOfExponentialData)
+sampleMean
+graph <- ggplot()+ aes(meanOfExponentialData) + geom_histogram(bandwidth = 10, color = "purple", fill="black")
+graph <- graph +  geom_vline(xintercept = theoriticalMean, color = 'green',size =2)
+graph <- graph +  geom_vline(xintercept = sampleMean, color = 'red', size =2)
+graph <- graph + labs(title = "Histogram of means for 1000 sample of 40 Exponentials with a rate of 0.2", x = "Sample Mean", y= " Sample Count")
+graph
+```
+ The red line in the ploat is showing the theoritical mean. From the plot we can clearly see that the means of the samples from the exponential distribution do center around the population mean of 5 as expected by the Central Limit Theorem, furthermore we may now calculate the mean of the 1000 sample means and we see that this number is indeed very close to 5 at 4.98.
+ 
+ ## Theoritical Variance Vs Sample Variance
+ Let's calculate the theoritical sample variance and Sample variance 
+ 
+```{r}
+# finding standarddeviation
+sd<-(1/lambda)/(sqrt(n)) 
+theoriticalVariance <- sd ^ 2
+theoriticalVariance
+
+sampleVariance <- var(meanOfExponentialData)
+sampleVariance
+
+ plotdata <- data.frame(meanOfExponentialData);
+        m <- ggplot(plotdata, aes(x = meanOfExponentialData)); 
+          
+        m <- m + geom_histogram(aes(y=..density..), colour="black", 
+                                fill = "blue")
+       m <- m+ stat_function(fun = dnorm, arg = list(mean =sampleMean  , sd = sd(meanOfExponentialData)), colour = "red", size=1)
+        m <- m+ stat_function(fun = dnorm, arg = list(mean =theoriticalMean  , sd = sd), colour = "green", size=1) 
+m<-m+ labs(title = "Histogram of variance for 1000 sample of 40 Exponentials with a rate of 0.2", x = "Sample Mean", y= " Sample Count")
+
+m
+```
+
+
+From the claculation it is pretty clear that the theoritical and sample variance are very close. I added a picture where the green line representing thoritical variance and red line represant sample variance 
+
+## Distribution
+
+```{r}
+ plotdata <- data.frame(meanOfExponentialData);
+        m <- ggplot(plotdata, aes(x = meanOfExponentialData)); 
+          
+        m <- m + geom_histogram(aes(y=..density..), colour="black", 
+                                fill = "blue")
+         m <- m+ stat_function(fun = dnorm, arg = list(mean =sampleMean  , sd = sd(meanOfExponentialData)), colour = "red", size=1)
+          m<-m+labs(title="Exponential Distribution Sample Means VS Standard Normal Distribution")
+m
+
+```
+
+
+We see from the histogram above that the properly normalized distribution of the sample means is approximately the same as the standard normal distribution whose density function is shown as the thick red line, which clearly demonstrates the Central Limit Theorem even with an nn of only 40 observations in our simulated samples of the exponential distribution.
+

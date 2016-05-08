@@ -1,0 +1,47 @@
+---
+title: "Statistical Inference Course project2"
+author: "Md Asadul Islam"
+date: '2016-05-08'
+output: html_document
+---
+## Overview 
+I am going to 
+
+* Load the ToothGrowth data and perform some basic exploratory data analyses
+* Provide a basic summary of the data.
+* Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. 
+* State your conclusions and the assumptions needed for your conclusions.
+
+```{r}
+library(ggplot2)
+library(datasets)
+
+data(ToothGrowth)
+
+```
+## Basic Summary of ToothGrowth data
+```{r}
+# let's see few data
+head(ToothGrowth)
+
+#let see type of data and it's stactures 
+str(ToothGrowth)
+
+# let's summarize data
+summary(ToothGrowth)
+```
+Let's do violin plot of Tooth length by Dose and suppement
+```{r}
+
+g <- ggplot(data = ToothGrowth, aes(x = factor(dose), y = len, fill = supp))
+g <- g + geom_violin() 
+g <- g + labs(title = "Violin Plot of Tooth Length by Dose and Supplement"
+              ,x = "Dose"
+              ,y = "Tooth Length"
+              ,fill = "Supplement")
+g <- g + geom_boxplot(width = 0.2, position = position_dodge(0.8))
+g
+```
+
+## Hypothesis test 
+
